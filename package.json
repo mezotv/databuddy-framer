@@ -1,0 +1,48 @@
+{
+  "name": "databuddy-analytics",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "pack": "npx framer-plugin-tools@latest pack"
+  },
+  "dependencies": {
+    "@radix-ui/react-checkbox": "^1.3.3",
+    "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-switch": "^1.2.6",
+    "@tailwindcss/vite": "^4.1.12",
+    "autoprefixer": "^10.4.21",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-plugin": "^3",
+    "lucide-react": "^0.542.0",
+    "postcss": "^8.5.6",
+    "react": "^18",
+    "react-dom": "^18",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss": "^4.1.12",
+    "tailwindcss-animate": "^1.0.7",
+    "vite-plugin-mkcert": "^1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@vitejs/plugin-react": "^4.3.1",
+    "@vitejs/plugin-react-swc": "^3",
+    "eslint": "^9.9.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.9",
+    "globals": "^15.9.0",
+    "tw-animate-css": "^1.3.7",
+    "typescript": "^5.3",
+    "typescript-eslint": "^8.0.1",
+    "vite": "^6",
+    "vite-plugin-framer": "^1"
+  },
+  "packageManager": "pnpm@9.15.1+sha512.1acb565e6193efbebda772702950469150cf12bcc764262e7587e71d19dc98a423dff9536e57ea44c49bdf790ff694e83c27be5faa23d67e0c033b583be4bfcf"
+}
