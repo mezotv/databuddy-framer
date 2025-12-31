@@ -14,6 +14,7 @@ const attributeMap: Record<string, string> = {
 };
 
 const databuddyScriptUrl = "https://cdn.databuddy.cc/databuddy.js";
+export const databuddyDashboardUrl = "https://app.databuddy.cc/websites";
 
 async function createDataAttributes(): Promise<string> {
   const attributes: string[] = [];

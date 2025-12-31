@@ -1,4 +1,5 @@
 import { framer } from "framer-plugin";
+import { Globe } from "@phosphor-icons/react";
 import { Info } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import "./framer.css";
@@ -11,7 +12,7 @@ import {
   TooltipTrigger,
 } from "./components/ui/tooltip";
 import { useCustomCode } from "./hooks/use-custom-code";
-import { removeScript, updateScript } from "./lib/script";
+import { databuddyDashboardUrl, removeScript, updateScript } from "./lib/script";
 import {
   getDefaultValue,
   loadSettings,
@@ -204,17 +205,29 @@ export function App() {
             <span>{isInstalled ? "Installed" : "Not installed"}</span>
           </div>
         </div>
-        <button
-          className={
-            isInstalled ? "framer-button-secondary" : "framer-button-primary"
-          }
-          disabled={!clientId}
-          onClick={handleInstall}
-          style={{ width: "100%" }}
-          type="button"
-        >
-          {isInstalled ? "Remove Script" : "Install Script"}
-        </button>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button
+            className={
+              isInstalled ? "framer-button-secondary" : "framer-button-primary"
+            }
+            disabled={!clientId}
+            onClick={handleInstall}
+            style={{ flex: 1 }}
+            type="button"
+          >
+            {isInstalled ? "Remove Script" : "Install Script"}
+          </button>
+          <button
+            className="framer-button-secondary"
+            disabled={!clientId}
+            onClick={() => window.open(`${databuddyDashboardUrl}/${clientId}`, "_blank")}
+            style={{ width: 30, padding: 0 }}
+            title="Open Dashboard"
+            type="button"
+          >
+            <Globe size={16} />
+          </button>
+        </div>
         {!clientId && (
           <p className="footer-hint">
             Enter your Client ID to install the script
