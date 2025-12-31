@@ -266,3 +266,20 @@ main {
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom tooltip styling for larger tooltips */
+.tooltip-large {
+  max-width: 16rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  background-color: var(--popover) !important;
+  color: var(--popover-foreground) !important;
+}
+
+/* Style the tooltip arrow to match the tooltip background */
+.tooltip-large > [data-slot="tooltip-arrow"],
+.tooltip-large > div {
+  background-color: var(--popover) !important;
+  fill: var(--popover) !important;
+}

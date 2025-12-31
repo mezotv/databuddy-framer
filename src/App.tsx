@@ -42,7 +42,7 @@ function OptionRow({ option, checked, disabled, onChange }: OptionRowProps) {
         <span>{option.label}</span>
         <Tooltip>
           <TooltipTrigger render={<Info className="info-icon" />} />
-          <TooltipContent side="top">
+          <TooltipContent side="top" className="tooltip-large">
             <p>{option.description}</p>
           </TooltipContent>
         </Tooltip>
