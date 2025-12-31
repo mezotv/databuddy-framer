@@ -272,12 +272,12 @@ main {
   padding: 0.75rem 1rem;
   font-size: 1rem;
   line-height: 1.4;
-  background-color: var(--popover) !important;
-  color: var(--popover-foreground) !important;
+  background-color: var(--tooltip-bg) !important;
+  color: var(--tooltip-text) !important;
 }
 
 .tooltip-large > [data-slot="tooltip-arrow"],
 .tooltip-large > div {
-  background-color: var(--popover) !important;
-  fill: var(--popover) !important;
+  background-color: var(--tooltip-bg) !important;
+  fill: var(--tooltip-bg) !important;
 }

@@ -1,5 +1,5 @@
-import { framer } from "framer-plugin";
 import { Globe } from "@phosphor-icons/react";
+import { framer } from "framer-plugin";
 import { Info } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import "./framer.css";
@@ -12,7 +12,11 @@ import {
   TooltipTrigger,
 } from "./components/ui/tooltip";
 import { useCustomCode } from "./hooks/use-custom-code";
-import { databuddyDashboardUrl, removeScript, updateScript } from "./lib/script";
+import {
+  databuddyDashboardUrl,
+  removeScript,
+  updateScript,
+} from "./lib/script";
 import {
   getDefaultValue,
   loadSettings,
@@ -42,7 +46,7 @@ function OptionRow({ option, checked, disabled, onChange }: OptionRowProps) {
         <span>{option.label}</span>
         <Tooltip>
           <TooltipTrigger render={<Info className="info-icon" />} />
-          <TooltipContent side="top" className="tooltip-large">
+          <TooltipContent className="tooltip-large" side="top">
             <p>{option.description}</p>
           </TooltipContent>
         </Tooltip>
@@ -220,7 +224,9 @@ export function App() {
           <button
             className="framer-button-secondary"
             disabled={!clientId}
-            onClick={() => window.open(`${databuddyDashboardUrl}/${clientId}`, "_blank")}
+            onClick={() =>
+              window.open(`${databuddyDashboardUrl}/${clientId}`, "_blank")
+            }
             style={{ width: 30, padding: 0 }}
             title="Open Dashboard"
             type="button"

@@ -17,41 +17,48 @@ body,
 :root {
   --framer-color-bg: #fff;
   --framer-color-bg-secondary: #f5f5f5;
+  --framer-color-bg-tertiary: #e8e8e8;
   --framer-color-text: #1a1a1a;
   --framer-color-text-secondary: #666;
   --framer-color-text-tertiary: #999;
   --framer-color-tint: #0099ff;
   --framer-color-border: #e5e5e5;
   --framer-color-divider: #e5e5e5;
-  --tooltip-bg: #1a1a1a;
-  --tooltip-text: #fff;
+  --tooltip-bg: #fff;
+  --tooltip-text: #1a1a1a;
+  --tooltip-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
+body[data-framer-theme="dark"],
 [data-framer-theme="dark"],
 :root:has([data-framer-theme="dark"]) {
   --framer-color-bg: #1a1a1a;
   --framer-color-bg-secondary: #2a2a2a;
+  --framer-color-bg-tertiary: #333;
   --framer-color-text: #fff;
   --framer-color-text-secondary: #999;
   --framer-color-text-tertiary: #666;
   --framer-color-tint: #0099ff;
   --framer-color-border: #333;
   --framer-color-divider: #333;
-  --tooltip-bg: #fff;
-  --tooltip-text: #1a1a1a;
+  --tooltip-bg: #333;
+  --tooltip-text: #fff;
+  --tooltip-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(:has([data-framer-theme="light"])) {
     --framer-color-bg: #1a1a1a;
     --framer-color-bg-secondary: #2a2a2a;
+    --framer-color-bg-tertiary: #333;
     --framer-color-text: #fff;
     --framer-color-text-secondary: #999;
     --framer-color-text-tertiary: #666;
     --framer-color-border: #333;
     --framer-color-divider: #333;
-    --tooltip-bg: #fff;
-    --tooltip-text: #1a1a1a;
+    --tooltip-bg: #333;
+    --tooltip-text: #fff;
+    --tooltip-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -174,7 +181,7 @@ button,
 }
 
 .framer-button-secondary:hover {
-  background: var(--framer-color-border);
+  background: var(--framer-color-bg-tertiary) !important;
 }
 
 .framer-button-secondary:active {
@@ -196,4 +203,16 @@ button,
 
 .framer-hide-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* Tooltip overrides for Framer theme compatibility */
+[data-slot="tooltip-content"] {
+  background-color: var(--tooltip-bg) !important;
+  color: var(--tooltip-text) !important;
+}
+
+[data-slot="tooltip-content"] [data-slot="tooltip-arrow"],
+[data-slot="tooltip-content"] > div {
+  background-color: var(--tooltip-bg) !important;
+  fill: var(--tooltip-bg) !important;
 }
