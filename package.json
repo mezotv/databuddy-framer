@@ -11,6 +11,7 @@
     "pack": "npx framer-plugin-tools@latest pack"
   },
   "dependencies": {
+    "@phosphor-icons/react": "^2.1.7",
     "@base-ui/react": "^1.0.0",
     "@tailwindcss/vite": "^4.1.18",
     "class-variance-authority": "^0.7.1",
