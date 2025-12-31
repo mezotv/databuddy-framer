@@ -271,7 +271,7 @@ main {
 .tooltip-large {
   max-width: 16rem;
   padding: 0.75rem 1rem;
-  font-size: 0.8125rem;
+  font-size: 1rem;
   line-height: 1.4;
   background-color: var(--popover) !important;
   color: var(--popover-foreground) !important;
