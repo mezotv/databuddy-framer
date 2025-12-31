@@ -1,0 +1,199 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-size: 12px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--framer-color-bg);
+  color: var(--framer-color-text);
+}
+
+:root {
+  --framer-color-bg: #fff;
+  --framer-color-bg-secondary: #f5f5f5;
+  --framer-color-text: #1a1a1a;
+  --framer-color-text-secondary: #666;
+  --framer-color-text-tertiary: #999;
+  --framer-color-tint: #0099ff;
+  --framer-color-border: #e5e5e5;
+  --framer-color-divider: #e5e5e5;
+  --tooltip-bg: #1a1a1a;
+  --tooltip-text: #fff;
+}
+
+[data-framer-theme="dark"],
+:root:has([data-framer-theme="dark"]) {
+  --framer-color-bg: #1a1a1a;
+  --framer-color-bg-secondary: #2a2a2a;
+  --framer-color-text: #fff;
+  --framer-color-text-secondary: #999;
+  --framer-color-text-tertiary: #666;
+  --framer-color-tint: #0099ff;
+  --framer-color-border: #333;
+  --framer-color-divider: #333;
+  --tooltip-bg: #fff;
+  --tooltip-text: #1a1a1a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --framer-color-bg: #1a1a1a;
+    --framer-color-bg-secondary: #2a2a2a;
+    --framer-color-text: #fff;
+    --framer-color-text-secondary: #999;
+    --framer-color-text-tertiary: #666;
+    --framer-color-border: #333;
+    --framer-color-divider: #333;
+    --tooltip-bg: #fff;
+    --tooltip-text: #1a1a1a;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+textarea,
+select {
+  display: block;
+  width: 100%;
+  height: 30px;
+  padding: 0 10px;
+  font-family: inherit;
+  font-size: 12px;
+  color: var(--framer-color-text);
+  background: var(--framer-color-bg-secondary);
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  transition: box-shadow 0.15s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+textarea:focus,
+select:focus {
+  box-shadow: inset 0 0 0 1px var(--framer-color-tint);
+}
+
+input[type="text"]::placeholder,
+input[type="number"]::placeholder,
+input[type="email"]::placeholder,
+input[type="url"]::placeholder,
+textarea::placeholder {
+  color: var(--framer-color-text-tertiary);
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  background: var(--framer-color-bg-secondary);
+  border: 1px solid var(--framer-color-border);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+  flex-shrink: 0;
+}
+
+input[type="checkbox"]:checked {
+  background: var(--framer-color-tint);
+  border-color: var(--framer-color-tint);
+}
+
+input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  width: 4px;
+  height: 7px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+input[type="checkbox"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button,
+.framer-button-primary,
+.framer-button-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  padding: 0 12px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  outline: none;
+}
+
+.framer-button-primary {
+  background: var(--framer-color-tint);
+  color: #fff;
+}
+
+.framer-button-primary:hover {
+  filter: brightness(1.1);
+}
+
+.framer-button-primary:active {
+  filter: brightness(0.95);
+}
+
+.framer-button-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.framer-button-secondary {
+  background: var(--framer-color-bg-secondary);
+  color: var(--framer-color-text);
+}
+
+.framer-button-secondary:hover {
+  background: var(--framer-color-border);
+}
+
+.framer-button-secondary:active {
+  filter: brightness(0.95);
+}
+
+.framer-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--framer-color-divider);
+  margin: 0;
+  border: none;
+}
+
+.framer-hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.framer-hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

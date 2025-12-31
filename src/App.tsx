@@ -1,135 +1,225 @@
-"use client"
 import { framer } from "framer-plugin";
-import "./App.css";
-import { useState } from "react"
-import { trackingOptions } from "./lib/data";
-import type { TrackingFieldsI } from "./types/options";
+import { Info } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import "./framer.css";
+import "./app.css";
+
+import { Checkbox } from "./components/ui/checkbox";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "./components/ui/tooltip";
+import { useCustomCode } from "./hooks/use-custom-code";
+import { removeScript, updateScript } from "./lib/script";
+import {
+  getDefaultValue,
+  loadSettings,
+  type Settings,
+  saveSetting,
+} from "./lib/settings";
+import type { TrackingFields } from "./types/tracking-options";
+import { trackingOptions } from "./util/integration";
 
 framer.showUI({
   position: "top right",
-  width: 400,
-  height: 700,
+  width: 300,
+  height: 460,
 });
 
-export function App() {
-  const [websiteId, setWebsiteId] = useState("")
-  const [analyticsEnabled, setAnalyticsEnabled] = useState(true)
-  const [settings, setSettings] = useState(() => {
-    const initialSettings: Record<string, boolean> = {}
-    Object.values(trackingOptions)
-      .flat()
-      .forEach((option) => {
-        initialSettings[option.id] = option.default
-      })
-    return initialSettings
-  })
+interface OptionRowProps {
+  option: TrackingFields;
+  checked: boolean;
+  disabled?: boolean;
+  onChange: (id: string, checked: boolean) => void;
+}
 
-  const handleSettingChange = (id: string, value: boolean) => {
-    setSettings((prev) => ({ ...prev, [id]: value }))
-  }
-
-  const formatSectionTitle = (key: string) => {
-    return key
-      .replace(/([A-Z])/g, " $1")
-      .replace(/^./, (str) => str.toUpperCase())
-      .trim()
-  }
-  
+function OptionRow({ option, checked, disabled, onChange }: OptionRowProps) {
   return (
-    <main >
-      <div className="grid grid-cols-4 gap-4">
-        <div className="col-span-4 grid grid-cols-subgrid gap-4">
-          <div className="flex flex-col items-start gap-2 col-span-4 w-full">
-            <label htmlFor="website-id" className="text-sm font-medium text-foreground">
-            Enter your Website ID
-            </label>
-            <input
-              type="text"
-              id="website-id"
-              placeholder="Website ID"
-              value={websiteId}
-              onChange={(e) => setWebsiteId(e.target.value)}
-              className="col-span-4 w-full px-3 py-2 border border-input rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring transition-colors"
-            />
-          </div>
+    <div className="option-row">
+      <div className={`option-label ${disabled ? "disabled" : ""}`}>
+        <span>{option.label}</span>
+        <Tooltip>
+          <TooltipTrigger render={<Info className="info-icon" />} />
+          <TooltipContent side="top">
+            <p>{option.description}</p>
+          </TooltipContent>
+        </Tooltip>
+      </div>
+      <Checkbox
+        checked={checked}
+        disabled={disabled}
+        onChange={(e) => onChange(option.id, e.target.checked)}
+      />
+    </div>
+  );
+}
 
-          <div className="col-span-4 grid grid-cols-subgrid gap-2">
-            <div className="flex items-center gap-2 col-span-2">
-              <label htmlFor="analytics-enabled" className="text-sm font-medium text-foreground">
-                Analytics Script
-              </label>
-            </div>
-            <input
-              type="checkbox"
-              id="analytics-enabled"
-              className="col-span-2 self-center justify-self-end w-4 h-4 text-primary bg-background border-input rounded focus:ring-ring focus:ring-2 transition-colors"
-              checked={analyticsEnabled}
-              onChange={(e) => setAnalyticsEnabled(e.target.checked)}
+interface SectionProps {
+  title: string;
+  options: TrackingFields[];
+  settings: Settings;
+  disabled?: boolean;
+  onChange: (id: string, checked: boolean) => void;
+  showDivider?: boolean;
+}
+
+function Section({
+  title,
+  options,
+  settings,
+  disabled,
+  onChange,
+  showDivider = true,
+}: SectionProps) {
+  const enabledCount = options.filter((option) => {
+    const value = settings[option.id];
+    return value === "true" || (value === null && option.default);
+  }).length;
+
+  return (
+    <>
+      {showDivider && <div className="divider" />}
+      <div className="section">
+        <div className="section-header">
+          <span className="section-title">{title}</span>
+          <span className="section-count">
+            {enabledCount}/{options.length}
+          </span>
+        </div>
+        {options.map((option) => {
+          const value = settings[option.id];
+          const checked =
+            value === null ? getDefaultValue(option.id) : value === "true";
+          return (
+            <OptionRow
+              checked={checked}
+              disabled={disabled}
+              key={option.id}
+              onChange={onChange}
+              option={option}
             />
-            <div className="col-span-4">
-              <p className="text-muted-foreground/70 text-xs">
-                Enable or disable the analytics script
-              </p>
-            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+}
+
+export function App() {
+  const customCode = useCustomCode();
+  const [settings, setSettings] = useState<Settings | null>(null);
+  const [clientId, setClientId] = useState("");
+
+  const isLoading = !customCode || settings === null;
+  const isInstalled = customCode?.headEnd?.html != null;
+
+  useEffect(() => {
+    loadSettings().then((s) => {
+      setSettings(s);
+      setClientId(s.clientId ?? "");
+    });
+  }, []);
+
+  const handleSettingChange = useCallback(
+    async (id: string, checked: boolean) => {
+      const value = checked ? "true" : "false";
+      await saveSetting(id, value);
+      setSettings((prev) => (prev ? { ...prev, [id]: value } : null));
+      if (isInstalled) {
+        await updateScript();
+      }
+    },
+    [isInstalled]
+  );
+
+  const handleClientIdChange = useCallback(
+    async (value: string) => {
+      setClientId(value);
+      await saveSetting("clientId", value || null);
+      if (isInstalled) {
+        await updateScript();
+      }
+    },
+    [isInstalled]
+  );
+
+  const handleInstall = useCallback(async () => {
+    if (isInstalled) {
+      await removeScript();
+    } else {
+      await updateScript();
+    }
+  }, [isInstalled]);
+
+  if (isLoading) {
+    return (
+      <main style={{ alignItems: "center", justifyContent: "center" }}>
+        <p style={{ color: "var(--framer-color-text-secondary)" }}>
+          Loading...
+        </p>
+      </main>
+    );
+  }
+
+  return (
+    <main>
+      <div className="input-group">
+        <label className="input-label" htmlFor="clientId">
+          Client ID
+        </label>
+        <input
+          id="clientId"
+          onChange={(e) => handleClientIdChange(e.target.value)}
+          placeholder="Enter your DataBuddy Client ID"
+          type="text"
+          value={clientId}
+        />
+      </div>
+
+      <div className="scroll-area">
+        <Section
+          disabled={!isInstalled}
+          onChange={handleSettingChange}
+          options={trackingOptions.coreTracking}
+          settings={settings}
+          showDivider={false}
+          title="Core Tracking"
+        />
+
+        <Section
+          disabled={!isInstalled}
+          onChange={handleSettingChange}
+          options={trackingOptions.advancedFeatures}
+          settings={settings}
+          title="Advanced Features"
+        />
+      </div>
+
+      <div className="footer">
+        <div className="status-row" style={{ marginBottom: 10 }}>
+          <span>Status</span>
+          <div className="status-indicator">
+            <span className={`status-dot ${isInstalled ? "active" : ""}`} />
+            <span>{isInstalled ? "Installed" : "Not installed"}</span>
           </div>
         </div>
-
-        <div className="col-span-4 h-px bg-border"></div>
-
-        <h2 className="text-lg font-semibold col-span-4 text-foreground">Tracking Options</h2>
-
-        {Object.entries(trackingOptions).map(([key, options], index) => (
-          <div key={key} className="col-span-4 grid grid-cols-subgrid gap-4">
-            <div className="col-span-4 grid grid-cols-subgrid gap-2">
-              <div className="flex items-center gap-2 col-span-2">
-                <h2 className="text-sm font-extrabold text-foreground">
-                  {formatSectionTitle(key)}
-                </h2>
-              </div>
-              <div className="col-span-2"></div>
-              <div className="col-span-4">
-                <p className="text-muted-foreground/70 text-xs">
-                  Configure {formatSectionTitle(key).toLowerCase()} tracking settings
-                </p>
-              </div>
-            </div>
-
-            {options.map((option: TrackingFieldsI) => (
-              <div key={option.id} className="col-span-4 grid grid-cols-subgrid gap-2">
-                <div className="flex items-center gap-2 col-span-2">
-                  <label htmlFor={option.id} className="text-sm font-medium text-foreground">
-                    {option.label}
-                  </label>
-                </div>
-                <input
-                  type="checkbox"
-                  id={option.id}
-                  className="col-span-2 self-center justify-self-end w-4 h-4 text-primary bg-background border-input rounded focus:ring-ring focus:ring-2 transition-colors"
-                  checked={settings[option.id]}
-                  onChange={(e) => handleSettingChange(option.id, e.target.checked)}
-                />
-                <div className="col-span-4">
-                  <p className="text-muted-foreground/70 text-xs">
-                    {option.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-
-            {index < Object.entries(trackingOptions).length - 1 && (
-              <div className="col-span-4 h-px bg-border my-2" />
-            )}
-          </div>
-        ))}
-
-        <div className="col-span-4 h-px bg-border" />
-
-        <div className="col-span-4 flex justify-center items-center mb-5">
-          <p className="text-xs text-muted-foreground/70 text-center">
-            © {new Date().getFullYear() === 2025 ? "2025" : `2025 - ${new Date().getFullYear()}`} Databuddy Analytics, Inc. All rights reserved.
+        <button
+          className={
+            isInstalled ? "framer-button-secondary" : "framer-button-primary"
+          }
+          disabled={!clientId}
+          onClick={handleInstall}
+          style={{ width: "100%" }}
+          type="button"
+        >
+          {isInstalled ? "Remove Script" : "Install Script"}
+        </button>
+        {!clientId && (
+          <p className="footer-hint">
+            Enter your Client ID to install the script
           </p>
-        </div>
-        <div className="col-span-4 h-px bg-none" />
+        )}
       </div>
     </main>
   );
