@@ -1,4 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
-  <path fill="#f3f3f3" d="M0 0h30v30H0Z"/>
-  <path fill="transparent" stroke="#999" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12 11-4 4 4 4m6-8 4 4-4 4"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 8 8" shape-rendering="crispEdges">
+  <title>Databuddy Logo</title>
+  <path d="M0 0h8v8H0z"/>
+  <path fill="#fff" d="M1 1h1v6H1zm1 0h4v1H2zm4 1h1v1H6zm0 1h1v1H6zm0 1h1v1H6zm0 1h1v1H6zM2 6h4v1H2zm1-3h1v1H3zm1 1h1v1H4z"/>
 </svg>
