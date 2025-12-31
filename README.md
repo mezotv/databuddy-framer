@@ -1,19 +1,15 @@
-# Framer Plugin Template
+# Databuddy Analytics Framer Plugin
 
-This is a template for using the Framer Plugin API in a TypeScript project.
+Databuddy is a fully open-source, GDPR and CCPA compliant analytics tool that puts privacy first.
 
-## Quickstart
+## Why choose Databuddy?
 
-First, run the development server:
+- Cookie-free tracking – No cookie consent banners needed
+- Lightweight – Just 3KB script, loads instantly
+- True privacy – No fingerprinting, complete data ownership
+- Real-time insights – Get the data you need, when you need it
+- 10x more efficient – Better for the planet, better for performance
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## The privacy-first alternative to Google Analytics (GA4)
 
-Learn more: https://www.framer.com/developers/plugins/introduction
+Databuddy delivers powerful analytics without compromising user privacy. Built-in compliance means you're covered from day one, and your visitors stay protected.
