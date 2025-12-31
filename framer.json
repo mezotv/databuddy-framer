@@ -1,8 +1,6 @@
 {
-  "id": "aac0dd",
+  "id": "dee06b",
   "name": "Databuddy Analytics",
-  "modes": [
-    "canvas"
-  ],
-  "icon": "/logo.svg"
+  "modes": ["canvas"],
+  "icon": "/icon.svg"
 }
