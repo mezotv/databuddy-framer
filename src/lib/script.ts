@@ -13,8 +13,18 @@ const attributeMap: Record<string, string> = {
   errors: "data-track-errors",
 };
 
-const databuddyScriptUrl = "https://cdn.databuddy.cc/databuddy.js";
-export const databuddyDashboardUrl = "https://app.databuddy.cc/websites";
+const DEFAULT_CDN_URL = "https://cdn.databuddy.cc/databuddy.js";
+const DEFAULT_DASHBOARD_URL = "https://app.databuddy.cc/websites";
+
+export async function getDatabuddyScriptUrl(): Promise<string> {
+  const customUrl = await framer.getPluginData(`${SETTING_PREFIX}customCdnUrl`);
+  return customUrl || DEFAULT_CDN_URL;
+}
+
+export async function getDatabuddyDashboardUrl(): Promise<string> {
+  const customUrl = await framer.getPluginData(`${SETTING_PREFIX}customDashboardUrl`);
+  return customUrl || DEFAULT_DASHBOARD_URL;
+}
 
 async function createDataAttributes(): Promise<string> {
   const attributes: string[] = [];
@@ -37,11 +47,12 @@ export async function createScript(): Promise<string> {
     return "";
   }
 
+  const scriptUrl = await getDatabuddyScriptUrl();
   const dataAttributes = await createDataAttributes();
   const attrString = dataAttributes ? `\n    ${dataAttributes}` : "";
 
   return `<script
-    src="${databuddyScriptUrl}"
+    src="${scriptUrl}"
     data-client-id="${clientId}"${attrString}
     crossorigin="anonymous"
     async
