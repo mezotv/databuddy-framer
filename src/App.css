@@ -133,6 +133,48 @@ main {
   margin-bottom: 6px;
 }
 
+.self-hosted-section {
+  margin-bottom: 12px;
+  border: 1px solid var(--framer-color-divider);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.self-hosted-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--framer-color-text);
+  transition: background 0.2s ease;
+}
+
+.self-hosted-toggle:hover {
+  background: var(--framer-color-bg-tertiary);
+}
+
+.toggle-arrow {
+  font-size: 10px;
+  color: var(--framer-color-text-tertiary);
+  transition: transform 0.2s ease;
+}
+
+.toggle-arrow.expanded {
+  transform: rotate(180deg);
+}
+
+.self-hosted-content {
+  padding: 12px;
+  border-top: 1px solid var(--framer-color-divider);
+  background: var(--framer-color-bg-secondary);
+}
+
 .footer {
   padding-top: 12px;
   border-top: 1px solid var(--framer-color-divider);
