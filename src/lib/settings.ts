@@ -7,7 +7,7 @@ const SETTING_PREFIX = "databuddy-";
 export type Settings = Record<string, string | null>;
 
 function getAllOptionIds(): string[] {
-  const ids: string[] = ["clientId"];
+  const ids: string[] = ["clientId", "customDashboardUrl", "customCdnUrl"];
 
   const categories = Object.values(trackingOptions) as TrackingFields[][];
   for (const category of categories) {

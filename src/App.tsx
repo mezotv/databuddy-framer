@@ -3,7 +3,7 @@ import { framer } from "framer-plugin";
 import { Info } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import "./framer.css";
-import "./app.css";
+import "./App.css";
 
 import { Checkbox } from "./components/ui/checkbox";
 import {
@@ -13,7 +13,7 @@ import {
 } from "./components/ui/tooltip";
 import { useCustomCode } from "./hooks/use-custom-code";
 import {
-  databuddyDashboardUrl,
+  getDatabuddyDashboardUrl,
   removeScript,
   updateScript,
 } from "./lib/script";
@@ -115,6 +115,9 @@ export function App() {
   const customCode = useCustomCode();
   const [settings, setSettings] = useState<Settings | null>(null);
   const [clientId, setClientId] = useState("");
+  const [customDashboardUrl, setCustomDashboardUrl] = useState("");
+  const [customCdnUrl, setCustomCdnUrl] = useState("");
+  const [showSelfHosted, setShowSelfHosted] = useState(false);
 
   const isLoading = !customCode || settings === null;
   const isInstalled = customCode?.headEnd?.html != null;
@@ -123,6 +126,8 @@ export function App() {
     loadSettings().then((s) => {
       setSettings(s);
       setClientId(s.clientId ?? "");
+      setCustomDashboardUrl(s.customDashboardUrl ?? "");
+      setCustomCdnUrl(s.customCdnUrl ?? "");
     });
   }, []);
 
@@ -149,6 +154,28 @@ export function App() {
     [isInstalled]
   );
 
+  const handleCustomDashboardUrlChange = useCallback(
+    async (value: string) => {
+      setCustomDashboardUrl(value);
+      await saveSetting("customDashboardUrl", value || null);
+      if (isInstalled) {
+        await updateScript();
+      }
+    },
+    [isInstalled]
+  );
+
+  const handleCustomCdnUrlChange = useCallback(
+    async (value: string) => {
+      setCustomCdnUrl(value);
+      await saveSetting("customCdnUrl", value || null);
+      if (isInstalled) {
+        await updateScript();
+      }
+    },
+    [isInstalled]
+  );
+
   const handleInstall = useCallback(async () => {
     if (isInstalled) {
       await removeScript();
@@ -156,6 +183,11 @@ export function App() {
       await updateScript();
     }
   }, [isInstalled]);
+
+  const handleOpenDashboard = useCallback(async () => {
+    const dashboardUrl = await getDatabuddyDashboardUrl();
+    window.open(`${dashboardUrl}/${clientId}`, "_blank");
+  }, [clientId]);
 
   if (isLoading) {
     return (
@@ -176,7 +208,7 @@ export function App() {
         <input
           id="clientId"
           onChange={(e) => handleClientIdChange(e.target.value)}
-          placeholder="Enter your DataBuddy Client ID"
+          placeholder="Enter your Databuddy Client ID"
           type="text"
           value={clientId}
         />
@@ -199,6 +231,96 @@ export function App() {
           settings={settings}
           title="Advanced Features"
         />
+
+        <div className="divider" />
+        <div className="section">
+          <div className="section-header">
+            <span className="section-title">Misc</span>
+          </div>
+          <div className="self-hosted-section">
+            <button
+              className="self-hosted-toggle"
+              onClick={() => setShowSelfHosted(!showSelfHosted)}
+              type="button"
+            >
+              <span>Self-Hosted Options</span>
+              <span
+                className={`toggle-arrow ${showSelfHosted ? "expanded" : ""}`}
+              >
+                ▼
+              </span>
+            </button>
+            {showSelfHosted && (
+              <div className="self-hosted-content">
+                <div className="input-group">
+                  <label className="input-label" htmlFor="customDashboardUrl">
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "4px",
+                      }}
+                    >
+                      <span>Dashboard URL</span>
+                      <Tooltip>
+                        <TooltipTrigger
+                          render={<Info className="info-icon" />}
+                        />
+                        <TooltipContent className="tooltip-large" side="top">
+                          <p>
+                            Custom dashboard URL for self-hosted Databuddy
+                            instances. Leave empty to use the default hosted
+                            dashboard.
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                  </label>
+                  <input
+                    id="customDashboardUrl"
+                    onChange={(e) =>
+                      handleCustomDashboardUrlChange(e.target.value)
+                    }
+                    placeholder="https://app.databuddy.cc/websites"
+                    type="url"
+                    value={customDashboardUrl}
+                  />
+                </div>
+                <div className="input-group">
+                  <label className="input-label" htmlFor="customCdnUrl">
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "4px",
+                      }}
+                    >
+                      <span>CDN URL</span>
+                      <Tooltip>
+                        <TooltipTrigger
+                          render={<Info className="info-icon" />}
+                        />
+                        <TooltipContent className="tooltip-large" side="top">
+                          <p>
+                            Custom CDN URL for the Databuddy tracking script.
+                            Leave empty to use the default CDN.
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                  </label>
+                  <input
+                    id="customCdnUrl"
+                    onChange={(e) => handleCustomCdnUrlChange(e.target.value)}
+                    placeholder="https://cdn.databuddy.cc/databuddy.js"
+                    type="url"
+                    value={customCdnUrl}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="footer">
@@ -224,9 +346,7 @@ export function App() {
           <button
             className="framer-button-secondary"
             disabled={!clientId}
-            onClick={() =>
-              window.open(`${databuddyDashboardUrl}/${clientId}`, "_blank")
-            }
+            onClick={handleOpenDashboard}
             style={{ width: 30, padding: 0 }}
             title="Open Dashboard"
             type="button"
