@@ -282,7 +282,7 @@ export function App() {
                       handleCustomDashboardUrlChange(e.target.value)
                     }
                     placeholder="https://app.databuddy.cc/websites"
-                    type="text"
+                    type="url"
                     value={customDashboardUrl}
                   />
                 </div>
@@ -313,7 +313,7 @@ export function App() {
                     id="customCdnUrl"
                     onChange={(e) => handleCustomCdnUrlChange(e.target.value)}
                     placeholder="https://cdn.databuddy.cc/databuddy.js"
-                    type="text"
+                    type="url"
                     value={customCdnUrl}
                   />
                 </div>
