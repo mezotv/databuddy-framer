@@ -22,7 +22,9 @@ export async function getDatabuddyScriptUrl(): Promise<string> {
 }
 
 export async function getDatabuddyDashboardUrl(): Promise<string> {
-  const customUrl = await framer.getPluginData(`${SETTING_PREFIX}customDashboardUrl`);
+  const customUrl = await framer.getPluginData(
+    `${SETTING_PREFIX}customDashboardUrl`
+  );
   return customUrl || DEFAULT_DASHBOARD_URL;
 }
 

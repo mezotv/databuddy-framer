@@ -208,51 +208,10 @@ export function App() {
         <input
           id="clientId"
           onChange={(e) => handleClientIdChange(e.target.value)}
-          placeholder="Enter your DataBuddy Client ID"
+          placeholder="Enter your Databuddy Client ID"
           type="text"
           value={clientId}
         />
-      </div>
-
-      <div className="self-hosted-section">
-        <button
-          className="self-hosted-toggle"
-          onClick={() => setShowSelfHosted(!showSelfHosted)}
-          type="button"
-        >
-          <span>Self-Hosted Options</span>
-          <span className={`toggle-arrow ${showSelfHosted ? "expanded" : ""}`}>
-            ▼
-          </span>
-        </button>
-        {showSelfHosted && (
-          <div className="self-hosted-content">
-            <div className="input-group">
-              <label className="input-label" htmlFor="customDashboardUrl">
-                Dashboard URL
-              </label>
-              <input
-                id="customDashboardUrl"
-                onChange={(e) => handleCustomDashboardUrlChange(e.target.value)}
-                placeholder="https://app.databuddy.cc/websites"
-                type="text"
-                value={customDashboardUrl}
-              />
-            </div>
-            <div className="input-group">
-              <label className="input-label" htmlFor="customCdnUrl">
-                CDN URL
-              </label>
-              <input
-                id="customCdnUrl"
-                onChange={(e) => handleCustomCdnUrlChange(e.target.value)}
-                placeholder="https://cdn.databuddy.cc/databuddy.js"
-                type="text"
-                value={customCdnUrl}
-              />
-            </div>
-          </div>
-        )}
       </div>
 
       <div className="scroll-area">
@@ -272,6 +231,96 @@ export function App() {
           settings={settings}
           title="Advanced Features"
         />
+
+        <div className="divider" />
+        <div className="section">
+          <div className="section-header">
+            <span className="section-title">Misc</span>
+          </div>
+          <div className="self-hosted-section">
+            <button
+              className="self-hosted-toggle"
+              onClick={() => setShowSelfHosted(!showSelfHosted)}
+              type="button"
+            >
+              <span>Self-Hosted Options</span>
+              <span
+                className={`toggle-arrow ${showSelfHosted ? "expanded" : ""}`}
+              >
+                ▼
+              </span>
+            </button>
+            {showSelfHosted && (
+              <div className="self-hosted-content">
+                <div className="input-group">
+                  <label className="input-label" htmlFor="customDashboardUrl">
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "4px",
+                      }}
+                    >
+                      <span>Dashboard URL</span>
+                      <Tooltip>
+                        <TooltipTrigger
+                          render={<Info className="info-icon" />}
+                        />
+                        <TooltipContent className="tooltip-large" side="top">
+                          <p>
+                            Custom dashboard URL for self-hosted Databuddy
+                            instances. Leave empty to use the default hosted
+                            dashboard.
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                  </label>
+                  <input
+                    id="customDashboardUrl"
+                    onChange={(e) =>
+                      handleCustomDashboardUrlChange(e.target.value)
+                    }
+                    placeholder="https://app.databuddy.cc/websites"
+                    type="text"
+                    value={customDashboardUrl}
+                  />
+                </div>
+                <div className="input-group">
+                  <label className="input-label" htmlFor="customCdnUrl">
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "4px",
+                      }}
+                    >
+                      <span>CDN URL</span>
+                      <Tooltip>
+                        <TooltipTrigger
+                          render={<Info className="info-icon" />}
+                        />
+                        <TooltipContent className="tooltip-large" side="top">
+                          <p>
+                            Custom CDN URL for the Databuddy tracking script.
+                            Leave empty to use the default CDN.
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                  </label>
+                  <input
+                    id="customCdnUrl"
+                    onChange={(e) => handleCustomCdnUrlChange(e.target.value)}
+                    placeholder="https://cdn.databuddy.cc/databuddy.js"
+                    type="text"
+                    value={customCdnUrl}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="footer">
