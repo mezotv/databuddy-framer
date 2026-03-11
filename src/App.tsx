@@ -1,6 +1,5 @@
-import { Globe } from "@phosphor-icons/react";
+import { GlobeIcon, InfoIcon } from "@phosphor-icons/react";
 import { framer } from "framer-plugin";
-import { Info } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import "./framer.css";
 import "./App.css";
@@ -45,7 +44,7 @@ function OptionRow({ option, checked, disabled, onChange }: OptionRowProps) {
       <div className={`option-label ${disabled ? "disabled" : ""}`}>
         <span>{option.label}</span>
         <Tooltip>
-          <TooltipTrigger render={<Info className="info-icon" />} />
+          <TooltipTrigger render={<InfoIcon className="info-icon" />} />
           <TooltipContent className="tooltip-large" side="top">
             <p>{option.description}</p>
           </TooltipContent>
@@ -264,7 +263,7 @@ export function App() {
                       <span>Dashboard URL</span>
                       <Tooltip>
                         <TooltipTrigger
-                          render={<Info className="info-icon" />}
+                          render={<InfoIcon className="info-icon" />}
                         />
                         <TooltipContent className="tooltip-large" side="top">
                           <p>
@@ -298,7 +297,7 @@ export function App() {
                       <span>CDN URL</span>
                       <Tooltip>
                         <TooltipTrigger
-                          render={<Info className="info-icon" />}
+                          render={<InfoIcon className="info-icon" />}
                         />
                         <TooltipContent className="tooltip-large" side="top">
                           <p>
@@ -351,7 +350,7 @@ export function App() {
             title="Open Dashboard"
             type="button"
           >
-            <Globe size={16} />
+            <GlobeIcon size={16} />
           </button>
         </div>
         {!clientId && (
