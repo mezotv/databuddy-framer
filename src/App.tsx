@@ -12,7 +12,7 @@ import {
 } from "./components/ui/tooltip";
 import { useCustomCode } from "./hooks/use-custom-code";
 import {
-  getDatabuddyDashboardUrl,
+  getDatabuddyDashboardLink,
   removeScript,
   updateScript,
 } from "./lib/script";
@@ -184,8 +184,13 @@ export function App() {
   }, [isInstalled]);
 
   const handleOpenDashboard = useCallback(async () => {
-    const dashboardUrl = await getDatabuddyDashboardUrl();
-    window.open(`${dashboardUrl}/${clientId}`, "_blank");
+    const dashboardUrl = await getDatabuddyDashboardLink(clientId);
+
+    if (!dashboardUrl) {
+      return;
+    }
+
+    window.open(dashboardUrl, "_blank", "noopener,noreferrer");
   }, [clientId]);
 
   if (isLoading) {
